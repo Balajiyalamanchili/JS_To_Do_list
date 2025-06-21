@@ -1,7 +1,7 @@
 let added = document.getElementById('added-items')
 let localStore = localStorage.getItem('balaji')
 
-if (localStore!== null) {
+if (localStore !== null) {
     let predefineddata = JSON.parse(localStore)
     predefineddata.reverse()
     for (let data of predefineddata) {
@@ -20,7 +20,7 @@ if (localStore!== null) {
         checkbox.type = 'checkbox'
         checkbox.style.marginRight = '8px'
         checkbox.style.marginLeft = '8px'
-        checkbox.checked = data[0]
+        // checkbox.checked = data[0]
 
 
         // let text = document.querySelector('input');
@@ -81,17 +81,19 @@ if (localStore!== null) {
         // console.log(added)
         // // console.log(added.replaceWith(newdiv))
         // console.log(added)
-        if (data[0] === true) {
-            content1.style.textDecoration = 'line-through';
-            newdiv.style.backgroundColor = '#FF4D73'
+        // if (data[0] === true) {
+            
 
-            content1.style.color = 'black'
+        //     // content1.style.textDecoration = 'line-through';
+        //     // newdiv.style.backgroundColor = '#FF4D73'
 
-            newdiv.append(deleteMove)
-            newdiv.style.justifyContent = 'space-between'
-            deletedisplay = true;
-            data[0] = false
-        }
+        //     // content1.style.color = 'black'
+
+        //     // newdiv.append(deleteMove)
+        //     // newdiv.style.justifyContent = 'space-between'
+        //     // deletedisplay = true;
+        //     // data[0] = false
+        // }
 
 
         deleteplease.addEventListener('click', () => {
@@ -176,16 +178,16 @@ if (localStore!== null) {
                 }
             })
         }
+        if (data[0] === true) {
+                checkbox.checked = 'true';
+                checkbox.dispatchEvent(new Event('change'));
+            }
     }
 }
 
-let form = document.querySelector('form');
 
-let namekey = 'balaji'
 
-form.onsubmit = (event) => {
-    event.preventDefault(); // 🔥 This stops the form from reloading the page
-
+function createNewDiv() {
     let newdiv = document.createElement('div');
     newdiv.style.backgroundColor = '#C1F7D5';
     newdiv.style.margin = '10px';
@@ -195,44 +197,49 @@ form.onsubmit = (event) => {
     newdiv.style.display = 'flex'
     newdiv.style.justifyContent = 'none'
     newdiv.setAttribute('class', 'divesof')
+    return newdiv
+}
 
+function createNewCheckbox() {
     let checkbox = document.createElement('input');
     checkbox.type = 'checkbox'
     checkbox.style.marginRight = '8px'
     checkbox.style.marginLeft = '8px'
-
-
-    let text = document.querySelector('input');
-
-    let content1 = document.createElement('div');
-    content1.innerText = text.value
-    content1.style.color = '#354463'
-    content1.style.font = 'normal normal bold 16px/20px Helvetica;'
-    content1.style.wordBreak = 'break-word'
+    return checkbox
+}
+function createNewContentDiv(whatToDo) {
+    let content = document.createElement('div');
+    content.innerText = whatToDo.value
+    content.style.color = '#354463'
+    content.style.font = 'normal normal bold 16px/20px Helvetica;'
+    content.style.wordBreak = 'break-word'
     // content1.style.overflowWrap = 'break-word'
     // content1.style.justifyContent = 'center'
+    whatToDo.value = null; // optional: clears the input
+    return content
+}
 
-    text.value = null; // optional: clears the input
-
+function mergeCheckboxAndContent(checkbox, content) {
     let checkboxContent = document.createElement('div');
     checkboxContent.style.display = 'flex'
     checkboxContent.prepend(checkbox)
-    checkboxContent.append(content1)
+    checkboxContent.append(content)
+    return checkboxContent
+}
 
-    let deleteMove = document.createElement('div');
-    deleteMove.setAttribute('class', 'deleteMove');
-    deleteMove.style.display = 'flex'
-
-    let deleteplease = document.createElement('button');
-    deleteplease.textContent = '❌'
+function createDeleteButton() {
+    let deleteButton = document.createElement('button');
+    deleteButton.textContent = '❌'
     // deleteplease.textContent = '\u{1F5D1}';
     // deleteplease.style.borderRadius = '100px'
-    deleteplease.style.border = '0'
-    deleteplease.style.marginRight = '10px'
-    deleteplease.style.height = '20px'
-    deleteplease.style.width = '20px'
+    deleteButton.style.border = '0'
+    deleteButton.style.marginRight = '10px'
+    deleteButton.style.height = '20px'
+    deleteButton.style.width = '20px'
+    return deleteButton
+}
 
-
+function createMovesButton() {
     let moveup = document.createElement('button');
     moveup.textContent = '⬆️'
     moveup.style.border = '0'
@@ -240,42 +247,48 @@ form.onsubmit = (event) => {
     moveup.style.height = '20px'
     moveup.style.width = '20px'
 
-
     let movedown = document.createElement('button');
     movedown.textContent = '⬇️'
     movedown.style.border = '0'
     movedown.style.marginRight = '10px'
     movedown.style.height = '20px'
     movedown.style.width = '20px'
+    return [moveup, movedown]
+}
 
+function mergeDeleteAndMoves(deleteButton, movedown, moveup) {
+    let deleteAndMoves = document.createElement('div');
+    deleteAndMoves.setAttribute('class', 'deleteMove');
+    deleteAndMoves.style.display = 'flex'
+    deleteAndMoves.prepend(deleteButton)
+    deleteAndMoves.prepend(movedown)
+    deleteAndMoves.prepend(moveup)
+    return deleteAndMoves
+}
 
-
-    deleteMove.prepend(deleteplease)
-    deleteMove.prepend(movedown)
-    deleteMove.prepend(moveup)
-
-    newdiv.prepend(checkboxContent)
-    added.prepend(newdiv);
-    // console.log(added)
-    // // console.log(added.replaceWith(newdiv))
-    // console.log(added)
-
-    deleteplease.addEventListener('click', () => {
-        alert(`Deleted a To Do Task with Content in it : ${content1.innerText}`)
+function deleteButtonEventlisteners(deleteButton, content, newdiv) {
+    deleteButton.addEventListener('click', () => {
+        alert(`Deleted a To Do Task with Content in it : ${content.innerText}`)
         added.removeChild(newdiv)
+        updateDataToLocalStorage()
+
     })
-    deleteplease.addEventListener('mouseenter', () => {
-        deleteplease.style.backgroundColor = '#FF033E';
+    deleteButton.addEventListener('mouseenter', () => {
+        deleteButton.style.backgroundColor = '#FF033E';
     });
-    deleteplease.addEventListener('mouseleave', () => {
-        deleteplease.style.backgroundColor = 'white'//#C1F7D5';
+    deleteButton.addEventListener('mouseleave', () => {
+        deleteButton.style.backgroundColor = 'white'//#C1F7D5';
     });
+}
 
 
+function movesEventlisteners(moveup, movedown) {
     movedown.addEventListener('click', (downevent) => {
         let currentDiv = downevent.srcElement.parentElement.parentElement;
         let nextDiv = currentDiv.nextElementSibling
         added.insertBefore(nextDiv, currentDiv); // Swap
+        updateDataToLocalStorage()
+
     })
     movedown.addEventListener('mouseenter', () => {
         movedown.style.backgroundColor = '#FF033E';
@@ -288,7 +301,7 @@ form.onsubmit = (event) => {
         let currentDiv = upevent.srcElement.parentElement.parentElement;
         let previousDiv = currentDiv.previousElementSibling
         added.insertBefore(currentDiv, previousDiv);
-
+        updateDataToLocalStorage()
     })
     moveup.addEventListener('mouseenter', () => {
         moveup.style.backgroundColor = '#FF033E';
@@ -296,37 +309,64 @@ form.onsubmit = (event) => {
     moveup.addEventListener('mouseleave', () => {
         moveup.style.backgroundColor = 'white'//#C1F7D5';
     });
+}
+
+
+let pushNewDiv = (whatToDo) => {
+    let newdiv = createNewDiv()
+    let checkbox = createNewCheckbox()
+    let content = createNewContentDiv(whatToDo)
+    let checkboxContent = mergeCheckboxAndContent(checkbox, content)
+    let deleteButton = createDeleteButton()
+    let [moveup, movedown] = createMovesButton()
+    let deleteAndMoves = mergeDeleteAndMoves(deleteButton, movedown, moveup)
+    newdiv.prepend(checkboxContent)
+    return [newdiv, checkbox, movedown, moveup, deleteButton, content, deleteAndMoves]
+}
+
+let form = document.querySelector('form');
+let namekey = 'balaji';
+
+form.onsubmit = (event) => {
+
+    event.preventDefault(); // 🔥 This stops the form from reloading the page
+    let whatToDo = document.querySelector('input');
+    let [newdiv, checkbox, movedown, moveup, deleteButton, content, deleteAndMoves] = pushNewDiv(whatToDo)
+
+    added.prepend(newdiv);
+
+    deleteButtonEventlisteners(deleteButton, content, newdiv)
+    movesEventlisteners(moveup, movedown)
+
 
     var deletedisplay = false;
     checkbox.addEventListener('change', () => {
         if (checkbox.checked) {
-            content1.style.textDecoration = 'line-through';
+            content.style.textDecoration = 'line-through';
             newdiv.style.backgroundColor = '#FF4D73'
+            content.style.color = 'black'
 
-            content1.style.color = 'black'
-
-            newdiv.append(deleteMove)
+            newdiv.append(deleteAndMoves)
             newdiv.style.justifyContent = 'space-between'
             deletedisplay = true;
+
         } else if (deletedisplay === true) {
-            content1.style.textDecoration = 'none';
-
+            content.style.textDecoration = 'none';
             newdiv.style.backgroundColor = '#C1F7D5'
-            content1.style.color = '#354463'
-            deletedisplay = false
 
+            content.style.color = '#354463'
+            deletedisplay = false
             newdiv.removeChild(newdiv.lastElementChild);
 
         }
+        updateDataToLocalStorage()
     });
-    var ans = 1;
     if (deletedisplay === false) {
         newdiv.addEventListener('mouseenter', () => {
 
             if (deletedisplay === false) {
-                newdiv.append(deleteMove)
+                newdiv.append(deleteAndMoves)
                 newdiv.style.justifyContent = 'space-between'
-                ans = 0
                 newdiv.style.backgroundColor = '#7FBD9F'
             }
         })
@@ -334,34 +374,41 @@ form.onsubmit = (event) => {
             if (deletedisplay === false) {
                 // newdiv.style.backgroundColor = 'gray'
                 // setTimeout(() => {
-                newdiv.removeChild(deleteMove);
-                ans = 1
+                newdiv.removeChild(deleteAndMoves);
                 newdiv.style.backgroundColor = '#C1F7D5'
                 newdiv.style.justifyContent = 'initial'
                 // },1000)
             }
         })
     }
+    updateDataToLocalStorage()
 };
 
 
-// setInterval(() => {
-//     localStorage.setItem('balaji',JSON.stringify(added.innerHTML))
-// }, 10)
-// console.log(added)
-
-
-
-setInterval(() => {
+var updateDataToLocalStorage = () => {
     let elements = added.getElementsByClassName('divesof')
     var l = []
     for (let k of elements) {
         let dicto = [k.firstChild.firstChild.checked, k.firstChild.lastChild.innerText]
         l.push(dicto)
     }
-    // console.log(l)
+    console.log(l)
     localStorage.setItem(namekey, JSON.stringify(l))
     // localStorage.removeItem(namekey);
+}
 
 
-}, 1)
+
+// setInterval(() => {
+//     let elements = added.getElementsByClassName('divesof')
+//     var l = []
+//     for (let k of elements) {
+//         let dicto = [k.firstChild.firstChild.checked, k.firstChild.lastChild.innerText]
+//         l.push(dicto)
+//     }
+//     // console.log(l)
+//     localStorage.setItem(namekey, JSON.stringify(l))
+//     // localStorage.removeItem(namekey);
+
+
+// }, 100)
