@@ -1,8 +1,7 @@
 let added = document.getElementById('added-items')
+let localStore = localStorage.getItem('balaji')
 
-if (localStorage.getItem("balaji") !== null) {
-    alert(localStorage.getItem("balaji"));
-    let localStore = localStorage.getItem('balaji')
+if (localStore!== null) {
     let predefineddata = JSON.parse(localStore)
     predefineddata.reverse()
     for (let data of predefineddata) {
