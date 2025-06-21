@@ -1,4 +1,4 @@
-function updateDataToLocalStorage  ()  {
+function updateDataToLocalStorage() {
     let elements = added.getElementsByClassName('divesof')
     let l = []
     for (let k of elements) {
@@ -16,7 +16,7 @@ if (localStore !== null) {
     let predefineddata = JSON.parse(localStore)
     predefineddata.reverse()
     for (let data of predefineddata) {
-        seperateforstore(data[1],data[0])
+        seperateforstore(data[1], data[0])
     }
 }
 
@@ -47,9 +47,6 @@ function createNewContentDiv(whatToDo) {
     content.style.color = '#354463'
     content.style.font = 'normal normal bold 16px/20px Helvetica;'
     content.style.wordBreak = 'break-word'
-    // content1.style.overflowWrap = 'break-word'
-    // content1.style.justifyContent = 'center'
-    // whatToDo.value = null; // optional: clears the input
     return content
 }
 
@@ -145,51 +142,47 @@ function movesEventlisteners(moveup, movedown) {
 }
 
 
-function checkboxEventListeners(newdiv, checkbox, movedown, moveup, deleteButton, content, deleteAndMoves,deletedisplay) {
+function checkboxEventListeners(newdiv, checkbox, movedown, moveup, deleteButton, content, deleteAndMoves) {
     checkbox.addEventListener('change', () => {
         if (checkbox.checked) {
             content.style.textDecoration = 'line-through';
             newdiv.style.backgroundColor = '#FF4D73'
             content.style.color = 'black'
-
             newdiv.append(deleteAndMoves)
             newdiv.style.justifyContent = 'space-between'
-            deletedisplay = true;
-
-        } else if (deletedisplay === true) {
-            content.style.textDecoration = 'none';
-            newdiv.style.backgroundColor = '#C1F7D5'
-
-            content.style.color = '#354463'
-            deletedisplay = false
-            newdiv.removeChild(newdiv.lastElementChild);
+            updateDataToLocalStorage()
 
         }
-        updateDataToLocalStorage()
-        return deletedisplay
+        else {
+            content.style.textDecoration = 'none';
+            newdiv.style.backgroundColor = '#C1F7D5'
+            content.style.color = '#354463'
+            newdiv.removeChild(newdiv.lastElementChild);
+            updateDataToLocalStorage()
+
+        }
     });
 }
 
-function ShowDeleteAndMoves(newdiv, checkbox, movedown, moveup, deleteButton, content, deleteAndMoves,deletedisplay) {
-    if (deletedisplay === false) {
-        newdiv.addEventListener('mouseenter', () => {
-            if (deletedisplay === false) {
-                newdiv.append(deleteAndMoves)
-                newdiv.style.justifyContent = 'space-between'
-                newdiv.style.backgroundColor = '#7FBD9F'
-            }
-        })
-        newdiv.addEventListener('mouseleave', () => {
-            if (deletedisplay === false) {
-                newdiv.removeChild(deleteAndMoves);
-                newdiv.style.backgroundColor = '#C1F7D5'
-                newdiv.style.justifyContent = 'initial'
-            }
-        })
-    }
+function ShowDeleteAndMoves(newdiv, checkbox, movedown, moveup, deleteButton, content, deleteAndMoves) {
+    newdiv.addEventListener('mouseenter', () => {
+        if (checkbox.checked != true) {
+            console.log('hell')
+            newdiv.append(deleteAndMoves)
+            newdiv.style.justifyContent = 'space-between'
+            newdiv.style.backgroundColor = '#7FBD9F'
+        }
+    })
+    newdiv.addEventListener('mouseleave', () => {
+        if (checkbox.checked != true) {
+            newdiv.removeChild(deleteAndMoves);
+            newdiv.style.backgroundColor = '#C1F7D5'
+            newdiv.style.justifyContent = 'initial'
+        }
+    })
 }
 
-function pushNewDiv (whatToDo)  {
+function pushNewDiv(whatToDo) {
     let newdiv = createNewDiv()
     let checkbox = createNewCheckbox()
     let content = createNewContentDiv(whatToDo)
@@ -202,19 +195,16 @@ function pushNewDiv (whatToDo)  {
 }
 
 
-
-
-function seperateforstore(whatToDo,checking) {
+function seperateforstore(whatToDo, checking) {
     let [newdiv, checkbox, movedown, moveup, deleteButton, content, deleteAndMoves] = pushNewDiv(whatToDo)
 
     added.prepend(newdiv);
 
     deleteButtonEventlisteners(deleteButton, content, newdiv)
     movesEventlisteners(moveup, movedown)
-    let deletedisplay = false;
-    deletedisplay = checkboxEventListeners(newdiv, checkbox, movedown, moveup, deleteButton, content, deleteAndMoves,deletedisplay)
-    ShowDeleteAndMoves(newdiv, checkbox, movedown, moveup, deleteButton, content, deleteAndMoves,deletedisplay)
-    if (checking==true){
+    checkboxEventListeners(newdiv, checkbox, movedown, moveup, deleteButton, content, deleteAndMoves)
+    ShowDeleteAndMoves(newdiv, checkbox, movedown, moveup, deleteButton, content, deleteAndMoves)
+    if (checking == true) {
         checkbox.checked = true
         checkbox.dispatchEvent(new Event('change'));
     }
@@ -225,11 +215,11 @@ let form = document.querySelector('form');
 let namekey = 'balaji';
 
 form.onsubmit = (event) => {
-    event.preventDefault(); // 🔥 This stops the form from reloading the page
+    event.preventDefault(); // This stops the form from reloading the page
     let whatToDo = document.querySelector('input');
     let whatToDoContent = whatToDo.value
     let checking = false
-    seperateforstore(whatToDoContent,checking)
+    seperateforstore(whatToDoContent, checking)
     whatToDo.value = null
 
 };
