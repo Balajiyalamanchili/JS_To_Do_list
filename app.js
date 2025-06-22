@@ -199,9 +199,11 @@ function seperateforstore(whatToDo, checking) {
 }
 
 let form = document.querySelector('form');
+
 let namekey = 'balaji';
 
 let added = document.getElementById('added-items')
+
 let localStore = localStorage.getItem(namekey)
 
 if (localStore !== null) {
@@ -213,10 +215,16 @@ if (localStore !== null) {
 }
 
 form.onsubmit = (event) => {
+
     event.preventDefault(); // This stops the form from reloading the page
+
+
     let whatToDo = document.querySelector('input');
+
     let whatToDoContent = whatToDo.value
+
     let checking = false
+    
     seperateforstore(whatToDoContent, checking)
     whatToDo.value = null
 };
