@@ -9,18 +9,6 @@ function updateDataToLocalStorage() {
     // localStorage.removeItem('balaji');
 }
 
-let added = document.getElementById('added-items')
-let localStore = localStorage.getItem('balaji')
-
-if (localStore !== null) {
-    let predefineddata = JSON.parse(localStore)
-    predefineddata.reverse()
-    for (let data of predefineddata) {
-        seperateforstore(data[1], data[0])
-    }
-}
-
-
 function createNewDiv() {
     let newdiv = document.createElement('div');
     newdiv.style.backgroundColor = '#C1F7D5';
@@ -142,7 +130,7 @@ function movesEventlisteners(moveup, movedown) {
 }
 
 
-function checkboxEventListeners(newdiv, checkbox, movedown, moveup, deleteButton, content, deleteAndMoves) {
+function checkboxEventListeners(newdiv, checkbox, content, deleteAndMoves) {
     checkbox.addEventListener('change', () => {
         if (checkbox.checked) {
             content.style.textDecoration = 'line-through';
@@ -164,10 +152,9 @@ function checkboxEventListeners(newdiv, checkbox, movedown, moveup, deleteButton
     });
 }
 
-function ShowDeleteAndMoves(newdiv, checkbox, movedown, moveup, deleteButton, content, deleteAndMoves) {
+function ShowDeleteAndMoves(newdiv, checkbox, deleteAndMoves) {
     newdiv.addEventListener('mouseenter', () => {
         if (checkbox.checked != true) {
-            console.log('hell')
             newdiv.append(deleteAndMoves)
             newdiv.style.justifyContent = 'space-between'
             newdiv.style.backgroundColor = '#7FBD9F'
@@ -202,8 +189,8 @@ function seperateforstore(whatToDo, checking) {
 
     deleteButtonEventlisteners(deleteButton, content, newdiv)
     movesEventlisteners(moveup, movedown)
-    checkboxEventListeners(newdiv, checkbox, movedown, moveup, deleteButton, content, deleteAndMoves)
-    ShowDeleteAndMoves(newdiv, checkbox, movedown, moveup, deleteButton, content, deleteAndMoves)
+    checkboxEventListeners(newdiv, checkbox, content, deleteAndMoves)
+    ShowDeleteAndMoves(newdiv, checkbox, deleteAndMoves)
     if (checking == true) {
         checkbox.checked = true
         checkbox.dispatchEvent(new Event('change'));
@@ -214,6 +201,17 @@ function seperateforstore(whatToDo, checking) {
 let form = document.querySelector('form');
 let namekey = 'balaji';
 
+let added = document.getElementById('added-items')
+let localStore = localStorage.getItem(namekey)
+
+if (localStore !== null) {
+    let predefineddata = JSON.parse(localStore)
+    predefineddata.reverse()
+    for (let data of predefineddata) {
+        seperateforstore(data[1], data[0])
+    }
+}
+
 form.onsubmit = (event) => {
     event.preventDefault(); // This stops the form from reloading the page
     let whatToDo = document.querySelector('input');
@@ -221,24 +219,4 @@ form.onsubmit = (event) => {
     let checking = false
     seperateforstore(whatToDoContent, checking)
     whatToDo.value = null
-
 };
-
-
-
-
-
-
-// setInterval(() => {
-//     let elements = added.getElementsByClassName('divesof')
-//     var l = []
-//     for (let k of elements) {
-//         let dicto = [k.firstChild.firstChild.checked, k.firstChild.lastChild.innerText]
-//         l.push(dicto)
-//     }
-//     // console.log(l)
-//     localStorage.setItem(namekey, JSON.stringify(l))
-//     // localStorage.removeItem(namekey);
-
-
-// }, 100)
