@@ -58,6 +58,21 @@ header {
     background-color: orange;
     color: white;
 }
+h2{
+    color: #FFFFFF;
+}
+#clearall{
+    padding: 5px;
+    margin-bottom: 10px;
+    background-color: red;
+}
+
+#activity-clearAll{
+    display: flex;
+    justify-content: space-between;
+    width: 91%;
+}
+
 
 #added-items {
     width: 90vw;

@@ -231,7 +231,16 @@ if (localStore !== null) {
     }
 }
 
+// To clear all in the list
+let clearAll = document.querySelector('#clearall')
+clearAll.addEventListener('click',()=>{
+    localStorage.removeItem('balaji');
+    added.innerHTML = ''
+})
+
+
 // starts when the form submit button is clicked
+
 
 form.onsubmit = (event) => {
     event.preventDefault(); // This stops the form from reloading the page
