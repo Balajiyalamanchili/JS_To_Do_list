@@ -117,7 +117,7 @@ function movesEventlisteners(moveup, movedown) {
 
     })
     movedown.addEventListener('mouseenter', () => {
-        movedown.style.backgroundColor = '#FF033E';
+        movedown.style.backgroundColor = 'lime'; //color #FF033E
     });
     movedown.addEventListener('mouseleave', () => {
         movedown.style.backgroundColor = 'white'//#C1F7D5';
@@ -130,7 +130,7 @@ function movesEventlisteners(moveup, movedown) {
         updateDataToLocalStorage()
     })
     moveup.addEventListener('mouseenter', () => {
-        moveup.style.backgroundColor = '#FF033E';
+        moveup.style.backgroundColor = 'lime';
     });
     moveup.addEventListener('mouseleave', () => {
         moveup.style.backgroundColor = 'white'//#C1F7D5';
