@@ -21,6 +21,7 @@ function createNewDiv() {
     newdiv.style.fontWeight = 'bold';
     newdiv.style.display = 'flex'
     newdiv.style.justifyContent = 'none'
+    newdiv.style.alignItems = 'center'
     newdiv.setAttribute('class', 'divesof')
     return newdiv
 }
