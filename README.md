@@ -1,6 +1,6 @@
 # To Do List
 
-A simple, interactive To Do List web application built with HTML, CSS, and JavaScript. This project allows users to add, check off, delete, and reorder tasks, with all changes saved in the browser's local storage.
+A simple, interactive To Do List web application built with HTML, CSS, and JavaScript. This project allows users to add, check off, delete, reorder, and clear all tasks, with all changes saved in the browser's local storage.
 
 ## Live Demo
 
@@ -12,6 +12,7 @@ A simple, interactive To Do List web application built with HTML, CSS, and JavaS
 - **Mark as Complete:** Check off tasks to mark them as done (with visual feedback).
 - **Delete Tasks:** Remove tasks from your list.
 - **Reorder Tasks:** Move tasks up or down in the list.
+- **Clear All Tasks:** Remove all tasks from your list at once.
 - **Persistent Storage:** All tasks and their states are saved in local storage and persist across page reloads.
 
 ## Folder Structure
@@ -28,6 +29,7 @@ to_do_list/
 
 - The app uses a form to accept new tasks.
 - Each task is displayed with a checkbox, delete button, and move up/down buttons.
+- A "Clear All" button allows you to remove all tasks at once.
 - Interactions update the UI and save the current state to local storage under the key `balaji`.
 - On page load, tasks are loaded from local storage and rendered.
 

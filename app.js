@@ -227,15 +227,17 @@ if (localStore !== null) {
     for (let data of predefineddata) {
         let whatToDoContent = data[1]
         let checkboxValue = data[0]
-        main(whatToDoContent,checkboxValue)
+        main(whatToDoContent, checkboxValue)
     }
 }
 
 // To clear all in the list
 let clearAll = document.querySelector('#clearall')
-clearAll.addEventListener('click',()=>{
-    localStorage.removeItem('balaji');
-    added.innerHTML = ''
+clearAll.addEventListener('click', () => {
+    if (confirm('Are you sure you want to clear all?')) {
+        localStorage.removeItem('balaji');
+        added.innerHTML= ''
+    }
 })
 
 
@@ -248,7 +250,7 @@ form.onsubmit = (event) => {
     let whatToDoInput = document.querySelector('input');
     let whatToDoContent = whatToDoInput.value
     whatToDoInput.value = null
-    let checkboxValue = false 
-    
+    let checkboxValue = false
+
     main(whatToDoContent, checkboxValue)
 };
