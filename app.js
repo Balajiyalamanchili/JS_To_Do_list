@@ -1,13 +1,16 @@
+// This function updates my local storage when ever I do changes in the To Do List------------------------------------
 function updateDataToLocalStorage() {
-    let elements = added.getElementsByClassName('divesof')
-    let l = []
-    for (let k of elements) {
-        let dicto = [k.firstChild.firstChild.checked, k.firstChild.lastChild.innerText]
-        l.push(dicto)
+    let toDoLists = added.getElementsByClassName('divesof')
+    let storeData = []
+    for (let task of toDoLists) {
+        let dicto = [task.firstChild.firstChild.checked, task.firstChild.lastChild.innerText]
+        storeData.push(dicto)
     }
-    localStorage.setItem('balaji', JSON.stringify(l))
+    localStorage.setItem('balaji', JSON.stringify(storeData))
     // localStorage.removeItem('balaji');
 }
+
+// Creating Elements-----------------------------------------------------------------
 
 function createNewDiv() {
     let newdiv = document.createElement('div');
@@ -29,6 +32,7 @@ function createNewCheckbox() {
     checkbox.style.marginLeft = '8px'
     return checkbox
 }
+
 function createNewContentDiv(whatToDo) {
     let content = document.createElement('div');
     content.innerText = whatToDo
@@ -36,14 +40,6 @@ function createNewContentDiv(whatToDo) {
     content.style.font = 'normal normal bold 16px/20px Helvetica;'
     content.style.wordBreak = 'break-word'
     return content
-}
-
-function mergeCheckboxAndContent(checkbox, content) {
-    let checkboxContent = document.createElement('div');
-    checkboxContent.style.display = 'flex'
-    checkboxContent.prepend(checkbox)
-    checkboxContent.append(content)
-    return checkboxContent
 }
 
 function createDeleteButton() {
@@ -74,6 +70,16 @@ function createMovesButton() {
     return [moveup, movedown]
 }
 
+// Merging elements into new divs ----------------------------------------------------------------
+
+function mergeCheckboxAndContent(checkbox, content) {
+    let checkboxContent = document.createElement('div');
+    checkboxContent.style.display = 'flex'
+    checkboxContent.prepend(checkbox)
+    checkboxContent.append(content)
+    return checkboxContent
+}
+
 function mergeDeleteAndMoves(deleteButton, movedown, moveup) {
     let deleteAndMoves = document.createElement('div');
     deleteAndMoves.setAttribute('class', 'deleteMove');
@@ -83,6 +89,9 @@ function mergeDeleteAndMoves(deleteButton, movedown, moveup) {
     deleteAndMoves.prepend(moveup)
     return deleteAndMoves
 }
+
+
+// Event Listeners--------------------------------------------------------------------------------
 
 function deleteButtonEventlisteners(deleteButton, content, newdiv) {
     deleteButton.addEventListener('click', () => {
@@ -98,7 +107,6 @@ function deleteButtonEventlisteners(deleteButton, content, newdiv) {
         deleteButton.style.backgroundColor = 'white'//#C1F7D5';
     });
 }
-
 
 function movesEventlisteners(moveup, movedown) {
     movedown.addEventListener('click', (downevent) => {
@@ -128,7 +136,6 @@ function movesEventlisteners(moveup, movedown) {
         moveup.style.backgroundColor = 'white'//#C1F7D5';
     });
 }
-
 
 function checkboxEventListeners(newdiv, checkbox, content, deleteAndMoves) {
     checkbox.addEventListener('change', () => {
@@ -169,6 +176,7 @@ function ShowDeleteAndMoves(newdiv, checkbox, deleteAndMoves) {
     })
 }
 
+
 function pushNewDiv(whatToDo) {
     let newdiv = createNewDiv()
     let checkbox = createNewCheckbox()
@@ -182,7 +190,8 @@ function pushNewDiv(whatToDo) {
 }
 
 
-function seperateforstore(whatToDo, checking) {
+function main(whatToDo, checkboxValue) {
+
     let [newdiv, checkbox, movedown, moveup, deleteButton, content, deleteAndMoves] = pushNewDiv(whatToDo)
 
     added.prepend(newdiv);
@@ -191,12 +200,16 @@ function seperateforstore(whatToDo, checking) {
     movesEventlisteners(moveup, movedown)
     checkboxEventListeners(newdiv, checkbox, content, deleteAndMoves)
     ShowDeleteAndMoves(newdiv, checkbox, deleteAndMoves)
-    if (checking == true) {
+
+    if (checkboxValue == true) {
         checkbox.checked = true
         checkbox.dispatchEvent(new Event('change'));
     }
     updateDataToLocalStorage()
 }
+
+
+// Code Starts Here -------------------------------------------------------------------------------------------------------------------------------->
 
 let form = document.querySelector('form');
 
@@ -204,27 +217,28 @@ let namekey = 'balaji';
 
 let added = document.getElementById('added-items')
 
-let localStore = localStorage.getItem(namekey)
+// Loading To Do content from Local Storage
 
+let localStore = localStorage.getItem(namekey)
 if (localStore !== null) {
     let predefineddata = JSON.parse(localStore)
     predefineddata.reverse()
     for (let data of predefineddata) {
-        seperateforstore(data[1], data[0])
+        let whatToDoContent = data[1]
+        let checkboxValue = data[0]
+        main(whatToDoContent,checkboxValue)
     }
 }
 
-form.onsubmit = (event) => {
+// starts when the form submit button is clicked
 
+form.onsubmit = (event) => {
     event.preventDefault(); // This stops the form from reloading the page
 
-
-    let whatToDo = document.querySelector('input');
-
-    let whatToDoContent = whatToDo.value
-
-    let checking = false
+    let whatToDoInput = document.querySelector('input');
+    let whatToDoContent = whatToDoInput.value
+    whatToDoInput.value = null
+    let checkboxValue = false 
     
-    seperateforstore(whatToDoContent, checking)
-    whatToDo.value = null
+    main(whatToDoContent, checkboxValue)
 };
